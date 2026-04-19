@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+
+# checkpoints and large data — stored in Google Drive, not repo
+checkpoints/
+logs/
+data/
+
+# notebook outputs
+notebooks/.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
