@@ -183,7 +183,7 @@ def main() -> None:
         total_epochs=cfg["train"]["epochs"],
         steps_per_epoch=max(1, len(train_loader)),
     )
-    scaler = torch.cuda.amp.GradScaler(enabled=cfg["train"]["amp"] and device.type == "cuda")
+    scaler = torch.amp.GradScaler("cuda", enabled=cfg["train"]["amp"] and device.type == "cuda")
     loss_fn = torch.nn.SmoothL1Loss(beta=1.0)
 
     ckpt_dir = Path(cfg["paths"]["ckpt_dir"])
@@ -220,7 +220,7 @@ def main() -> None:
             targets = batch["target"].to(device, non_blocking=True)
 
             optimizer.zero_grad(set_to_none=True)
-            with torch.cuda.amp.autocast(enabled=scaler.is_enabled()):
+            with torch.amp.autocast("cuda", enabled=scaler.is_enabled()):
                 preds = model(images)
                 loss = loss_fn(preds, targets)
             scaler.scale(loss).backward()
