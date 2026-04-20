@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Icons } from '../components/Icons'
 import { calcTDEE, adjustForGoal, calcMacros } from '../utils/tdee'
-import { saveProfile } from '../utils/storage'
+import { saveProfile, getProfile } from '../utils/storage'
 
 const ACTIVITIES = [
   { id:'sedentary', icon:'🛋️', label:'Sedentary',          sub:'Little or no exercise' },
@@ -12,7 +12,8 @@ const ACTIVITIES = [
 ]
 
 export default function ProfilePage({ darkMode, setDarkMode, onProfileSave }) {
-  const [form, setForm] = useState({ age:'25', sex:'male', weight:'70', wUnit:'kg', height:'175', hUnit:'cm', activity:'moderate', goal:'maintain' })
+  const DEFAULTS = { age:'25', sex:'male', weight:'70', wUnit:'kg', height:'175', hUnit:'cm', activity:'moderate', goal:'maintain' }
+  const [form, setForm] = useState(() => { const p = getProfile(); return p ? { ...DEFAULTS, ...p } : DEFAULTS })
   const [result, setResult] = useState(null)
   const [saved,  setSaved]  = useState(false)
   const up = (k, v) => { setForm(f => ({ ...f, [k]: v })); setSaved(false) }
