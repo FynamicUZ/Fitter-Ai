@@ -134,11 +134,15 @@ class TargetNormalizer:
 def build_transforms(image_size: int, train: bool):
     if train:
         return A.Compose([
-            A.SmallestMaxSize(max_size=int(image_size * 1.15)),
+            A.SmallestMaxSize(max_size=int(image_size * 1.2)),
             A.RandomCrop(image_size, image_size),
             A.HorizontalFlip(p=0.5),
-            A.Rotate(limit=10, border_mode=cv2.BORDER_REFLECT_101, p=0.5),
-            A.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.05, p=0.5),
+            A.VerticalFlip(p=0.2),
+            A.Rotate(limit=45, border_mode=cv2.BORDER_REFLECT_101, p=0.6),
+            A.Perspective(scale=(0.05, 0.15), p=0.4),
+            A.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.08, p=0.6),
+            A.GaussianBlur(blur_limit=(3, 7), p=0.2),
+            A.CoarseDropout(num_holes_range=(1, 8), hole_height_range=(16, 32), hole_width_range=(16, 32), p=0.3),
             A.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
             ToTensorV2(),
         ])

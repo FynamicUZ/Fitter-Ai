@@ -1,0 +1,47 @@
+# EfficientNet-B4 config — stronger augmentation, 20 epochs.
+# Override any field from the CLI: --set train.epochs=10
+
+data:
+  root: /content/drive/MyDrive/fitter/data
+  images_subdir: realsense_overhead
+  metadata_files:
+    - metadata/dish_metadata_cafe1.csv
+    - metadata/dish_metadata_cafe2.csv
+  splits_dir: dish_ids/splits
+  train_split: rgb_train_ids.txt
+  test_split: rgb_test_ids.txt
+  val_fraction: 0.1
+  image_size: 224
+  num_workers: 2
+
+targets:
+  names: [calories, mass, fat, carb, protein]
+  csv_columns:
+    calories: total_calories
+    mass: total_mass
+    fat: total_fat
+    carb: total_carb
+    protein: total_protein
+
+model:
+  backbone: efficientnet_b4
+  pretrained: true
+  dropout: 0.3
+  hidden_dim: 512
+
+train:
+  epochs: 20
+  batch_size: 24                               # B4 is larger — drop from 32 to fit T4
+  eval_batch_size: 48
+  lr_backbone: 1.0e-4
+  lr_head: 1.0e-3
+  weight_decay: 0.05
+  warmup_epochs: 2
+  freeze_backbone_epochs: 2
+  amp: true
+  seed: 42
+  log_every: 20
+
+paths:
+  ckpt_dir: /content/drive/MyDrive/fitter/checkpoints_b4
+  log_dir: /content/drive/MyDrive/fitter/logs_b4
