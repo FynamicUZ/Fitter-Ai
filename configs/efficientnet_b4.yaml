@@ -30,7 +30,7 @@ model:
   hidden_dim: 512
 
 train:
-  epochs: 20
+  epochs: 30
   batch_size: 24                               # B4 is larger — drop from 32 to fit T4
   eval_batch_size: 48
   lr_backbone: 1.0e-4
